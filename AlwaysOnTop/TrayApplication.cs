@@ -38,13 +38,13 @@ namespace AlwaysOnTop
 
         private void onDiscardClicked(object sender, EventArgs e)
         {
-            this.fileToRun = System.IO.Directory.GetCurrentDirectory() + "\\res\\discard.exe";
+            this.fileToRun = System.IO.Directory.GetCurrentDirectory() + "\\res\\Discard.exe";
             mouseHandler.Start();
         }
 
         private void onApplyClicked(object sender, EventArgs e)
         {
-            this.fileToRun = System.IO.Directory.GetCurrentDirectory() + "\\res\\apply.exe";
+            this.fileToRun = System.IO.Directory.GetCurrentDirectory() + "\\res\\Apply.exe";
             mouseHandler.Start();
         }
 
