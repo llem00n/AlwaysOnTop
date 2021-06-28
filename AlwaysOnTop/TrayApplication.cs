@@ -4,14 +4,18 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using MouseKeyboardLibrary;
+using Windows;
+
 
 namespace AlwaysOnTop
 {
     public class TrayApplication : ApplicationContext
     {
+        private enum ActionType { Apply, Discard };
+
         private NotifyIcon notifyicon;
         private MouseHook mouseHandler;
-        private string fileToRun;
+        private ActionType action;
 
         public TrayApplication()
         {
@@ -31,20 +35,28 @@ namespace AlwaysOnTop
 
         private void mouseHandler_MouseDown(object sender, MouseEventArgs e)
         {
-            Thread.Sleep(500);
-            System.Diagnostics.Process.Start(this.fileToRun);
+            if (e.Button == MouseButtons.Left)
+            {
+                Thread.Sleep(500);
+
+                IntPtr window = WinApi.GetForegroundWindow();
+                WinApi.SetWindowPos(window, action == ActionType.Apply ? WinApi.HWND_TOPMOST : WinApi.HWND_NOTOPMOST, 0, 0, 0, 0, WinApi.SWP_NOSIZE | WinApi.SWP_NOMOVE);
+            }
+
             mouseHandler.Stop();
         }
 
         private void onDiscardClicked(object sender, EventArgs e)
         {
-            this.fileToRun = System.IO.Directory.GetCurrentDirectory() + "\\res\\Discard.exe";
+            action = ActionType.Discard;
+
             mouseHandler.Start();
         }
 
         private void onApplyClicked(object sender, EventArgs e)
         {
-            this.fileToRun = System.IO.Directory.GetCurrentDirectory() + "\\res\\Apply.exe";
+            action = ActionType.Apply;
+
             mouseHandler.Start();
         }
 
